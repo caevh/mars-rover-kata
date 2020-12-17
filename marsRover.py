@@ -43,9 +43,6 @@ class Thing:
         elif self.compass == "W":
             self.compass = "N"
 
-
-
-
 class Martian(Thing):
     
     def destroy(self):
