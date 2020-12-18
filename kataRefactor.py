@@ -6,6 +6,7 @@ class Rover:
         self.x = x
         self.y = y
         self.compass = compass
+        self.world.globe_gen(x, y)
 
     def move_forward(self):
         # Moves the rover forward and depending on which way its facing will +,- from x or y axis
@@ -59,7 +60,7 @@ class Rover:
         self.location()
     
     def location(self):
-        reference_world = self.world.globe_gen()
+        reference_world = self.world.globe_gen(self.x, self.y)
         if self.x == reference_world[0] + 1:
             self.x = self.world.x_axis_wrapper(self.x)
         elif self.x == reference_world[1]:
@@ -77,9 +78,12 @@ class World:
     def __init__(self, globe=[]):
         self.globe = globe
     
-    def globe_gen(self):
+    def globe_gen(self, x, y):
         globe = []
-        x_y_axis = random.randint(10, 20)
+        if x > y:
+            x_y_axis = random.randint(x, x+20)
+        else:
+            x_y_axis = random.randint(y, y+20)
         globe.append(-x_y_axis)
         globe.append(x_y_axis)
         globe.append(-x_y_axis)
