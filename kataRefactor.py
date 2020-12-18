@@ -1,3 +1,4 @@
+import random
 class Rover:
 
     def __init__(self, x, y, compass, world):
@@ -21,10 +22,8 @@ class Rover:
         # Moves the rover backwards and depending on which way its facing will +, - from x or y axis
         if self.compass == "N":
             self.x -= 1
-            
         elif self.compass == "S":
             self.x += 1
-        
         elif self.compass == "W":
             self.y += 1
         elif self.compass == "E":
@@ -60,13 +59,14 @@ class Rover:
         self.location()
     
     def location(self):
-        if self.x == -11:
+        reference_world = self.world.globe_gen()
+        if self.x == reference_world[0] + 1:
             self.x = self.world.x_axis_wrapper(self.x)
-        elif self.x == 11:
+        elif self.x == reference_world[1]:
             self.x = self.world.x_axis_wrapper(self.x)
-        elif self.y == -11:
+        elif self.y == reference_world[2]:
             self.y = self.world.y_axis_wrapper(self.y)
-        elif self.y == 11:
+        elif self.y == reference_world[-1]:
             self.y = self.world.y_axis_wrapper(self.y)
 
         # Used to print where the Rover is at the end of the sequence
@@ -74,25 +74,37 @@ class Rover:
         print(f"direction: {self.compass}")
 
 class World:
-    def __init__(self, globe):
+    def __init__(self, globe=[]):
         self.globe = globe
+    
+    def globe_gen(self):
+        globe = []
+        x_y_axis = random.randint(10, 20)
+        globe.append(-x_y_axis)
+        globe.append(x_y_axis)
+        globe.append(-x_y_axis)
+        globe.append(x_y_axis)
+        self.globe = globe
+        print(globe)
+        return globe
 
-    def x_axis_wrapper(self, x, compass):
+
+    def x_axis_wrapper(self, x):
         # Used to wrap when rover reaches the end of the world on the y axis
-        if x == 11:
+        north_south_edge = self.globe[1] + 1
+        if x == north_south_edge:
             x = -10
             return x
-
-        elif x == -11:
+        elif x == -north_south_edge:
             x = 10
             return x
     
     def y_axis_wrapper(self, y):
         # Used to wrap when rover reaches the end of the globe on the y axis
-        if y == 11 :
+        east_west_edge = self.globe[-1] + 1
+        if y == east_west_edge:
             y = -10
             return y
-
-        elif y == -11:
+        elif y == -east_west_edge:
             y = 10
             return y
