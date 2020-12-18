@@ -1,10 +1,10 @@
-from MarsRoverClass import Rover
+from kataRefactor import *
 
-
-rover1 = Rover(-10, -10, "E", [-10, 10, -10, 10])
+world1 = World([-10, 10, -10, 10])
+rover1 = Rover(10, 10, "E", world1)
 print(rover1.x)
 print(rover1.y)
 
 print(rover1.compass)
-rover1.commands(["b"])
+rover1.commands(["f"])
 print(rover1.x)

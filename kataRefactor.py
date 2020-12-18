@@ -1,68 +1,35 @@
-class World:
-    def __init__(self, globe, x, y, compass):
-        self.globe = globe
+class Rover:
+
+    def __init__(self, x, y, compass, world):
+        self.world = world
         self.x = x
         self.y = y
         self.compass = compass
-
-    def x_axis_wrapper(self):
-        # Used to wrap when rover reaches the end of the world on the y axis
-        if self.x == 11 and self.compass == "N":
-            self.x = -10
-        if self.x == 11 and self.compass == "S":
-            self.x = -10
-        elif self.x == -11 and self.compass == "S":
-            self.x = 10
-        elif self.x == -11 and self.compass == "N":
-            self.x = 10
-    
-    def y_axis_wrapper(self):
-        # Used to wrap when rover reaches the end of the globe on the y axis
-        if self.y == 11 and self.compass == "E":
-            self.y = -10
-        elif self.y == 11 and self.compass == "W":
-            self.y = -10
-        elif self.y == -11 and self.compass == "W":
-            self.y = 10
-        elif self.y == -11 and self.compass == "E":
-            self.y = 10
- 
-
-class Rover(World):
-    def __init__(self, x, y, compass, globe):
-        super().__init__(globe, x, y, compass)
-
 
     def move_forward(self):
         # Moves the rover forward and depending on which way its facing will +,- from x or y axis
         if self.compass == "N":
             self.x += 1
-            self.x_axis_wrapper()
         elif self.compass == "S":
             self.x -= 1
-            self.x_axis_wrapper()
         elif self.compass == "W":
             self.y -= 1
-            self.y_axis_wrapper()
         elif self.compass == "E":
             self.y += 1
-            self.y_axis_wrapper()
 
     def move_backward(self):
         # Moves the rover backwards and depending on which way its facing will +, - from x or y axis
         if self.compass == "N":
             self.x -= 1
-            self.x_axis_wrapper()
+            
         elif self.compass == "S":
             self.x += 1
-            self.x_axis_wrapper()
+        
         elif self.compass == "W":
             self.y += 1
-            self.y_axis_wrapper()
         elif self.compass == "E":
             self.y -= 1
-            self.y_axis_wrapper()
-
+    
     def turn_left(self):
         # Used to turn the rover left
         directions = {"N": "W", "W": "S", "S": "E", "E": "N"}
@@ -93,6 +60,39 @@ class Rover(World):
         self.location()
     
     def location(self):
+        if self.x == -11:
+            self.x = self.world.x_axis_wrapper(self.x)
+        elif self.x == 11:
+            self.x = self.world.x_axis_wrapper(self.x)
+        elif self.y == -11:
+            self.y = self.world.y_axis_wrapper(self.y)
+        elif self.y == 11:
+            self.y = self.world.y_axis_wrapper(self.y)
+
         # Used to print where the Rover is at the end of the sequence
         print(f"Current coordinates: ({self.x}, {self.y})")
         print(f"direction: {self.compass}")
+
+class World:
+    def __init__(self, globe):
+        self.globe = globe
+
+    def x_axis_wrapper(self, x, compass):
+        # Used to wrap when rover reaches the end of the world on the y axis
+        if x == 11:
+            x = -10
+            return x
+
+        elif x == -11:
+            x = 10
+            return x
+    
+    def y_axis_wrapper(self, y):
+        # Used to wrap when rover reaches the end of the globe on the y axis
+        if y == 11 :
+            y = -10
+            return y
+
+        elif y == -11:
+            y = 10
+            return y
